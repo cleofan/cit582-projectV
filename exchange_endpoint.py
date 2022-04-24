@@ -184,6 +184,9 @@ def fill_order(order, txes=[]):
         txes.append(child_tx)
         #Then match for child order
         return(fill_order(child_order, txes))
+    
+    else:
+        return txes
 
 
 
