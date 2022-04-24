@@ -136,7 +136,6 @@ def fill_order(order, txes=[]):
     if count > 0:
         existing_order = query.first()
         #First validate that the existing order has a payment
-        existing_order_txid = existing_o
         #Update filled to timestamp
         dt = datetime.now()
         
