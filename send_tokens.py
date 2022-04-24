@@ -135,6 +135,7 @@ def wait_for_confirmation_eth(w3, tx_hash):
 def send_tokens_eth(w3,sender_sk,txes):
     sender_account = w3.eth.account.privateKeyToAccount(sender_sk)
     sender_pk = sender_account._address
+    print("The sender eth pk is", sender_pk)
 
     # TODO: For each of the txes, sign and send them to the testnet
     # Make sure you track the nonce -locally-
