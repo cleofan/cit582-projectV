@@ -144,6 +144,7 @@ def fill_order(order, txes=[]):
             
         elif existing_order.sell_currency == "Algorand":
             existing_tx = g.icl.search_transactions(txid = existing_tx_id)
+            print("The existing tx is", existing_tx)
             if(existing_tx == [] or existing_tx[0].amt != existing_order.sell_amount):
                 return
 
@@ -324,6 +325,7 @@ def trade():
             
             elif order.sell_currency == "Algorand":
                 order_tx = g.icl.search_transactions(txid = order_tx_id)
+                print("The searched order is ", order_tx)
                 if(order_tx == [] or order_tx[0].amt != order.sell_amount):
                     return jsonify(False)
 
