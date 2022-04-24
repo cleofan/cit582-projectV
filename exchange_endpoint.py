@@ -333,7 +333,7 @@ def trade():
 
         # 3b. Fill the order (as in Exchange Server II) if the order is valid
             txes = []
-            fill_order(order, txe)
+            fill_order(order, txes)
         
         # 4. Execute the transactions
             if(len(txes) > 0):
