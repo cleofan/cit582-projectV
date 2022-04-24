@@ -360,6 +360,7 @@ def order_book():
         order['buy_amount']=u.buy_amount
         order['sell_amount']=u.sell_amount
         order['signature']=u.signature
+        order['tx_id'] = u.tx_id
         result_lst.append(order)
     result = {}
     result['data']=result_lst
