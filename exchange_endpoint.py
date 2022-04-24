@@ -13,6 +13,7 @@ import math
 import sys
 import traceback
 import random
+from algosdk.v2client import indexer
 from web3 import Web3
 
 # TODO: make sure you implement connect_to_algo, send_tokens_algo, and send_tokens_eth
@@ -318,8 +319,8 @@ def trade():
             order_tx_id = order.tx_id
             if (order.sell_currency == "Ethereum"):
                 order_tx = g.w3.eth.get_transaction(order_tx_id)
-            if(order_tx['value'] != order.sell_amount or order_tx is None):
-                return jsonify(False)
+                if(order_tx['value'] != order.sell_amount or order_tx is None):
+                    return jsonify(False)
             
             elif order.sell_currency == "Algorand":
                 order_tx = indexer.search_transaction(txid = order_tx_id)
