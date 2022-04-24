@@ -130,7 +130,7 @@ def fill_order(order, txes=[]):
     # Make sure that you end up executing all resulting transactions!
     
     
-    query = session.query(Order).filter(Order.filled == None, Order.buy_currency == order.sell_currency, Order.sell_currency == order.buy_currency, Order.sell_amount / Order.buy_amount >= order.buy_amount/order.sell_amount)   
+    query = g.session.query(Order).filter(Order.filled == None, Order.buy_currency == order.sell_currency, Order.sell_currency == order.buy_currency, Order.sell_amount / Order.buy_amount >= order.buy_amount/order.sell_amount)   
     count = query.count()
     if count > 0:
         existing_order = query.first()
