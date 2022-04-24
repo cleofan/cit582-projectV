@@ -141,12 +141,12 @@ def fill_order(order, txes=[]):
         if (existing_order.sell_currency == "Ethereum"):
             existing_tx = g.w3.eth.get_transaction(existing_tx_id)       
             if(existing_tx['value'] != existing_order.sell_amount):
-                return
+                return txes
             
         elif existing_order.sell_currency == "Algorand":
             existing_tx = (g.icl.search_transactions(txid = existing_tx_id))["transactions"]
             if(existing_tx == [] or existing_tx[0]["payment-transaction"]["amount"] != existing_order.sell_amount):
-                return
+                return yxes
 
         #Update filled to timestamp
         dt = datetime.now()
@@ -175,7 +175,7 @@ def fill_order(order, txes=[]):
             g.session.add(child_order)
         
         else:
-            return
+            return txes
         
         g.session.commit()
         #Also create the child tx for execution
@@ -183,7 +183,7 @@ def fill_order(order, txes=[]):
         #add it to the list of txes to be executed
         txes.append(child_tx)
         #Then match for child order
-        fill_order(child_order, txes)
+        return(fill_order(child_order, txes))
 
 
 
