@@ -40,11 +40,13 @@ def send_tokens_algo( acl, sender_sk, txes):
     # TODO: Return a list of transaction id's
 
     sender_pk = account.address_from_private_key(sender_sk)
+    
+    print("The sender_pk is", sender_pk)
 
     tx_ids = []
     for i,tx in enumerate(txes):
         receiver_pk = tx["receiver_pk"]
-        print("The receiver_pk is", receiver_pk)
+        
         amount = tx["amount"]
         
         unsigned_tx = transaction.PaymentTxn(sender_pk , params, receiver_pk, amount )
