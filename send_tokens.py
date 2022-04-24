@@ -46,6 +46,7 @@ def send_tokens_algo( acl, sender_sk, txes):
     tx_ids = []
     for i,tx in enumerate(txes):
         receiver_pk = tx["receiver_pk"]
+        print("Show me the receiver_pk", receiver_pk)
         
         amount = tx["amount"]
         
