@@ -278,7 +278,6 @@ def address():
 def trade():
     print( "In trade", file=sys.stderr )
     connect_to_blockchains()
-    #get_keys()
     if request.method == "POST":
         content = request.get_json(silent=True)
         columns = [ "buy_currency", "sell_currency", "buy_amount", "sell_amount", "platform", "tx_id", "receiver_pk"]
