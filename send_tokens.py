@@ -44,7 +44,9 @@ def send_tokens_algo( acl, sender_sk, txes):
     tx_ids = []
     for i,tx in enumerate(txes):
         receiver_pk = tx["receiver_pk"]
+        print("The receiver_pk is", receiver_pk)
         amount = tx["amount"]
+        
         unsigned_tx = transaction.PaymentTxn(sender_pk , params, receiver_pk, amount )
         params.first += 1
         params.last += 1
