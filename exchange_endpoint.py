@@ -138,14 +138,14 @@ def fill_order(order, txes=[]):
         #First validate that the existing order has a payment
         existing_tx_id = existing_order.tx_id
         if (existing_order.sell_currency == "Ethereum"):
-            existing_tx = w3.eth.get_transaction(existing_tx_id)
+            existing_tx = w3.eth.get_transaction(existing_tx_id)       
             if(existing_tx['value'] != existing_order.sell_amount):
                 return
             
         elif existing_order.sell_currency == "Algorand":
-            existing_tx = g.icl.search_transactions(txid = existing_tx_id)
+            existing_tx = (g.icl.search_transactions(txid = existing_tx_id))["transactions"]
             print("The existing tx is", existing_tx)
-            if(existing_tx == [] or existing_tx[0].amt != existing_order.sell_amount):
+            if(existing_tx == [] or existing_tx[0]["payment-transaction"]["amount"] != existing_order.sell_amount):
                 return
 
         #Update filled to timestamp
@@ -324,9 +324,9 @@ def trade():
                     return jsonify(False)
             
             elif order.sell_currency == "Algorand":
-                order_tx = g.icl.search_transactions(txid = order_tx_id)
+                order_tx = (g.icl.search_transactions(txid = order_tx_id))["transactions"]
                 print("The searched order is ", order_tx)
-                if(order_tx == [] or order_tx[0].amt != order.sell_amount):
+                if(order_tx == [] or order_tx[0]["payment-transaction"]["amount"] != order.sell_amount):
                     return jsonify(False)
 
 
