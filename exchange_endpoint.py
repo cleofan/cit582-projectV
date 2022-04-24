@@ -181,7 +181,7 @@ def fill_order(order, txes=[]):
         #add it to the list of txes to be executed
         txes.append(child_tx)
         #Then match for child order
-        fill_order(child_buy, txes)
+        fill_order(child_order, txes)
 
 
 
