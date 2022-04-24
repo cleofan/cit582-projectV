@@ -22,6 +22,7 @@ engine = create_engine('sqlite:///orders.db')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 
+print("We are at line 25")
 app = Flask(__name__)
 
 """ Pre-defined methods (do not need to change) """
