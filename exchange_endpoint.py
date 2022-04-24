@@ -163,7 +163,7 @@ def fill_order(order, txes=[]):
             sell_max = existing_order.sell_amount - order.buy_amount
             child_sell = random.randint(sell_min, sell_max)
             child_order = Order( sender_pk=existing_order.sender_pk,receiver_pk=existing_order.receiver_pk, buy_currency=existing_order.buy_currency, sell_currency=existing_order.sell_currency, buy_amount=child_buy, sell_amount=child_sell, creator_id = existing_order.id)
-            session.add(child_order)
+            g.session.add(child_order)
         
         elif order.buy_amount > existing_order.sell_amount:
             #Calculate the max unfilled amount
@@ -172,7 +172,7 @@ def fill_order(order, txes=[]):
             sell_max = order.sell_amount - existing_order.buy_amount
             child_sell = random.randint(sell_min, sell_max)
             child_order = Order( sender_pk=order.sender_pk,receiver_pk=order.receiver_pk, buy_currency=order.buy_currency, sell_currency=order.sell_currency, buy_amount=child_buy, sell_amount=child_sell, creator_id = order.id)
-            session.add(child_order)
+            g.session.add(child_order)
         
         else:
             return
