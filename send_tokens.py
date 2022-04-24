@@ -66,7 +66,7 @@ def send_tokens_algo( acl, sender_sk, txes):
         tx_id = signed_tx.transaction.get_txid()
         tx_ids.append(tx_id)
         tx['tx_id'] = tx_id
-        new_tx = TX("platform" = tx['platform'], "receiver_pk" = tx['receiver_pk'], "order_id" = tx["order_id"], "tx_id" = tx["tx_id"])
+        new_tx = TX(platform = tx['platform'], receiver_pk = tx['receiver_pk'], order_id = tx["order_id"], tx_id = tx["tx_id"])
         g.session.add(new_tx)
         g.session.commit()
 
@@ -150,7 +150,7 @@ def send_tokens_eth(w3,sender_sk,txes):
         tx_id = w3.eth.send_raw_transaction(signed_txn.rawTransaction)
         tx_ids.append(tx_id)
         tx['tx_id'] = tx_id
-        new_tx = TX("platform" = tx['platform'], "receiver_pk" = tx['receiver_pk'], "order_id" = tx["order_id"], "tx_id" = tx["tx_id"])
+        new_tx = TX(platform = tx['platform'], receiver_pk = tx['receiver_pk'], order_id = tx["order_id"], tx_id = tx["tx_id"])
         g.session.add(new_tx)
         g.session.commit()
         continue
