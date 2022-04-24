@@ -130,6 +130,8 @@ def fill_order(order, txes=[]):
     # Validate the order has a payment to back it (make sure the counterparty also made a payment)
     # Make sure that you end up executing all resulting transactions!
     
+
+    
     query = g.session.query(Order).filter(Order.filled == None, Order.buy_currency == order.sell_currency, Order.sell_currency == order.buy_currency, Order.sell_amount / Order.buy_amount >= order.buy_amount/order.sell_amount)   
     count = query.count()
     if count > 0:
@@ -327,6 +329,9 @@ def trade():
                 
                 if(order_tx == [] or order_tx[0]["payment-transaction"]["amount"] != order.sell_amount):
                     return jsonify(False)
+            new_tx = TX(platform = order.sell_currency, receiver_pk = order.receiver_pk, tx_id = order.tx_id, order_id = order.id)
+            g.session.add(new_tx)
+            g.session.commit()
 
 
         # 3b. Fill the order (as in Exchange Server II) if the order is valid
