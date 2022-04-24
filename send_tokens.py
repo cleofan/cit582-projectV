@@ -20,7 +20,7 @@ def connect_to_algo(connection_type=''):
         algod_address = "https://testnet-algorand.api.purestake.io/ps2"
         purestake_token = {'X-Api-Key': algod_token}
         algodclient = algod.AlgodClient(algod_token, algod_address, headers=purestake_token)
-        return algoclient
+        return algodclient
 
     return None
 
