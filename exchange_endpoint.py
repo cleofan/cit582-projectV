@@ -146,7 +146,7 @@ def fill_order(order, txes=[]):
         elif existing_order.sell_currency == "Algorand":
             existing_tx = (g.icl.search_transactions(txid = existing_tx_id))["transactions"]
             if(existing_tx == [] or existing_tx[0]["payment-transaction"]["amount"] != existing_order.sell_amount):
-                return yxes
+                return txes
 
         #Update filled to timestamp
         dt = datetime.now()
