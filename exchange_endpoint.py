@@ -314,7 +314,7 @@ def trade():
         # 2. Add the order to the table
             del payload['platform']
             payload['signature'] = sig
-            order = Order(**{f: payload[f] for f in payload})
+            order = Order(receiver_pk = payload['receiver_pk'], sender_pk = payload['sender_pk'], tx_id = payload['tx_id'], buy_currency = payload['buy_currency'], sell_currency = payload['sell_currency'], buy_amount = payload['buy_amount'], sell_amount = payload['sell_amount'], signature= payload['signature'])
             g.session.add(order)
             g.session.commit()
         
