@@ -321,7 +321,7 @@ def trade():
         # 3a. Check if the order is backed by a transaction equal to the sell_amount (this is new)
             order_tx_id = order['tx_id']
             if (order.sell_currency == "Ethereum"):
-            order_tx = w3.eth.get_transaction(order_tx_id)
+                order_tx = w3.eth.get_transaction(order_tx_id)
             if(order_tx['value'] != order.sell_amount or order_tx is None):
                 return jsonify(False)
             
