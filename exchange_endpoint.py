@@ -143,7 +143,7 @@ def fill_order(order, txes=[]):
                 return
             
         elif existing_order.sell_currency == "Algorand":
-            existing_tx = indexer.search_transactions(txid = existing_tx_id)
+            existing_tx = g.icl.search_transactions(txid = existing_tx_id)
             if(existing_tx == [] or existing_tx[0].amt != existing_order.sell_amount):
                 return
 
@@ -323,7 +323,7 @@ def trade():
                     return jsonify(False)
             
             elif order.sell_currency == "Algorand":
-                order_tx = indexer.search_transactions(txid = order_tx_id)
+                order_tx = g.icl.search_transactions(txid = order_tx_id)
                 if(order_tx == [] or order_tx[0].amt != order.sell_amount):
                     return jsonify(False)
 
