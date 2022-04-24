@@ -84,6 +84,7 @@ def connect_to_blockchains():
         g.w3 = connect_to_eth()
         
 """ End of pre-defined methods """
+print("Are we here at line 87?")
         
 """ Helper Methods (skeleton code for you to implement) """
 
