@@ -138,7 +138,7 @@ def send_tokens_eth(w3,sender_sk,txes):
     for i,tx in enumerate(txes):
         # Your code here
         tx_amount = tx['amount']
-        reciever_pk = tx['receiver_pk']
+        receiver_pk = tx['receiver_pk']
         tx_dict = {
                 'nonce': starting_nonce+i, #Locally update nonce
                 'gasPrice':w3.eth.gas_price,
