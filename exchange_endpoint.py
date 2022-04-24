@@ -222,7 +222,7 @@ def execute_txes(txes):
         g.session.add(transaction)
         g.session.commit()
     
-    send_tokens_eth(g.eth, eth_sk, eth_txes)
+    send_tokens_eth(g.w3, eth_sk, eth_txes)
     for tx in eth_txes:
         transaction = TX(platform = tx['platform'], receiver_pk = tx['receiver_pk'], order_id = tx['order_id'], tx_id = tx['tx_id'])
         g.session.add(transaction)
