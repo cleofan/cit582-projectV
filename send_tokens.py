@@ -54,7 +54,7 @@ def send_tokens_algo( acl, sender_sk, txes):
         params.last += 1
 
         # TODO: Sign the transaction
-        signed_tx = unisigned_tx.sign(sender_sk)
+        signed_tx = unsigned_tx.sign(sender_sk)
         print("Yay! Signed the algo unsigned txn!")
         
         try:
