@@ -147,6 +147,7 @@ def fill_order(order, txes=[]):
         
         #First validate that the existing order has a payment
         existing_tx_id = existing_order.tx_id
+        print("existing tx id",existing_tx_id)
         if (existing_order.sell_currency == "Ethereum"):
             try:
                 order_tx = g.w3.eth.get_transaction(existing_tx_id)
