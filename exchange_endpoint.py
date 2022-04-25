@@ -375,7 +375,7 @@ def trade():
                 #order_tx_id = base64.b64decode(order_tx_id).encode('ascii')
                 time.sleep(5)
                 try:
-                    response = json.dumps(g.icl.search_transactions(txid = order_tx_id))
+                    response = g.icl.search_transactions(txid = order_tx_id)
                     if response is None:
                         return jsonify(False)
                     transactions = response.get("transactions")
