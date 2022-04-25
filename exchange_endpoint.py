@@ -382,7 +382,7 @@ def trade():
                         return jsonify(False)
                     print("Algo: verification on chain is done.")
                     """
-                    print("The receiver matched? ", (transactions["payment-transaction"]["receiver"] == payload["receiver_pk"]))
+                    print("The receiver matched? ", (transactions["payment-transaction"]["receiver"] == algo_pk))
                 except Exception as e:
                     print("Error in using the indexer in Trade endpoint.")
                     print(e)
