@@ -4,6 +4,7 @@ from algosdk.v2client import algod
 from algosdk.v2client import indexer
 from algosdk import account
 from algosdk.future import transaction
+import time
 
 def connect_to_algo(connection_type=''):
     #Connect to Algorand node maintained by PureStake
