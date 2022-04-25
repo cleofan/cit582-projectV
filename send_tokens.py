@@ -40,8 +40,6 @@ def send_tokens_algo( acl, sender_sk, txes):
     # TODO: Return a list of transaction id's
 
     sender_pk = account.address_from_private_key(sender_sk)
-    
-    print("The sender_pk is", sender_pk)
 
     tx_ids = []
     for i,tx in enumerate(txes):
@@ -51,11 +49,13 @@ def send_tokens_algo( acl, sender_sk, txes):
         amount = tx["amount"]
         
         unsigned_tx = transaction.PaymentTxn(sender_pk , params, receiver_pk, amount )
+        print("Yay! Created the algo unsigned txn!")
         params.first += 1
         params.last += 1
 
         # TODO: Sign the transaction
         signed_tx = unisigned_tx.sign(sender_sk)
+        print("Yay! Signed the algo unsigned txn!")
         
         try:
             print(f"Sending {tx['amount']} microalgo from {sender_pk} to {tx['receiver_pk']}" )
@@ -69,11 +69,13 @@ def send_tokens_algo( acl, sender_sk, txes):
             print(e)
         
         tx_id = signed_tx.transaction.get_txid()
+        print("The new algo tx_id is", tx_id)
         tx_ids.append(tx_id)
         tx['tx_id'] = tx_id
         new_tx = TX(platform = tx['platform'], receiver_pk = tx['receiver_pk'], order_id = tx["order_id"], tx_id = tx["tx_id"])
         g.session.add(new_tx)
         g.session.commit()
+        print("Added the new executed tx to TX")
 
     return tx_ids
 
