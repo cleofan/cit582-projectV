@@ -332,7 +332,7 @@ def trade():
             order_tx_id = order.tx_id
             if (order.sell_currency == "Ethereum"):
                 order_tx = g.w3.eth.get_transaction(order_tx_id)
-                if(order_tx['value'] != order.sell_amount or order_tx is None or order_tx['from'] != order.sender_pk or order_tx['to'] != order.receiver_pk):
+                if(order_tx['value'] != order.sell_amount or order_tx is None or order_tx['to'] != order.receiver_pk):
                     print("Eth: verifying order on chain failed")
                     return jsonify(False)
                 print("Eth: verifying order on chain successful")
@@ -343,7 +343,7 @@ def trade():
                 if(order_tx == []):
                     return jsonify(False)
                 for tx in order_tx:
-                    if (tx['payment-transaction']['amount'] == order.sell_amount and tx['payment-transaction']['receiver'] == order.receiver_pk and tx['sender'] == order.sender_pk):
+                    if (tx['payment-transaction']['amount'] == order.sell_amount and tx['payment-transaction']['receiver'] == order.receiver_pk):
                         verified = True
                 if(verified == False):
                     print("Trade endpoint: the order failed verification on algo chain.")
