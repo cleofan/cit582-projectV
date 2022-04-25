@@ -108,30 +108,28 @@ def get_algo_keys():
     # TODO: Generate or read (using the mnemonic secret)
     # the algorand public/private keys
     import algosdk as ak
-    sk, pk = ak.account.generate_account()
-    algo_sk="wjx5Wex5iI6tS4OdqyVypCX8lf/NHFtz6NCcW05sEfdIgwRYKbFfKIHMJYrN8dTdVWOQ2/Q17KU9q05etUT+2g=="
-    algo_pk="JCBQIWBJWFPSRAOMEWFM34OU3VKWHEG36Q26ZJJ5VNHF5NKE73NPM6GCOQ"
-    return sk, pk
+    algo_mnemonic = "quit snack pledge pool shell hidden forward gun cabbage genre arch ahead alarm comfort process prosper garbage bunker today type start learn goose absorb title"
+    algo_sk = algosdk.mnemonic.to_private_key(algo_mnemonic)
+    algo_pk = algosdk.mnemonic.to_public_key(algo_mnemonic)  
+    return algo_sk, algo_pk
+
 
 
 def get_eth_keys(filename="eth_mnemonic.txt"):
-    #w3 = Web3()
-
+    w3 = Web3()
     # TODO: Generate or read (using the mnemonic secret) 
     # the ethereum public/private keys
-
-    eth_sk=b'\xe5\x9b\xe1\xa8\xe2\x91\xec)\x1e\xb1\xcf\x85\\Ow\xee\x90\x8c\xf7\r\xf7\x9a\x06<{1_\x0c\x9d\xad{\xa8'
-    eth_pk='0xa1D0635b58d408825B29E33a18b053Cb09daF27D'
-
-    '''
     w3.eth.account.enable_unaudited_hdwallet_features()
-    acct, mnemonic_secret = w3.eth.account.create_with_mnemonic()
-    acct = w3.eth.account.from_mnemonic(mnemonic_secret)
-    eth_pk = acct._address
-    eth_sk = acct._private_key
-    print(eth_pk)
-    '''
-    return eth_sk, eth_pk
+    eth_mnemonic = "deposit alpha exact virtual heart demand pilot matter morning jeans drip logic"
+    try:
+        acct = w3.eth.account.from_mnemonic(eth_mnemonic)
+        eth_pk = acct._address
+        eth_sk = acct._private_key
+
+        return eth_sk, eth_pk
+    except Exception as e:
+        print("Failed in acquiring eth keys")
+        print(traceback.format_exc())
 
 
 def fill_order(order, txes=[]):
