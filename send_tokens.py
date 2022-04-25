@@ -44,14 +44,10 @@ def send_tokens_algo( acl, sender_sk, txes):
     tx_ids = []
     for i,tx in enumerate(txes):
         receiver_pk = tx["receiver_pk"]
-        print("ALGO:Show me the receiver_pk", receiver_pk)
-        
+        print("ALGO:Show me the receiver_pk", receiver_pk)        
         amount = tx["amount"]
-        
         unsigned_tx = transaction.PaymentTxn(sender_pk , params, receiver_pk, amount )
         print("Yay! Created the algo unsigned txn!")
-        params.first += 1
-        params.last += 1
 
         # TODO: Sign the transaction
         signed_tx = unsigned_tx.sign(sender_sk)
@@ -69,7 +65,8 @@ def send_tokens_algo( acl, sender_sk, txes):
         except Exception as e:
             print(e)
         
-        
+        params.first += 1
+        params.last += 1
         print("The new algo tx_id is", tx_id)
         tx_ids.append(tx_id)
         tx['tx_id'] = tx_id
@@ -153,10 +150,17 @@ def send_tokens_eth(w3,sender_sk,txes):
                 'to': receiver_pk,
                 'value': tx_amount,
                 'data':b'' }
-        signed_txn = w3.eth.account.sign_transaction(tx_dict, sender_sk)
-        tx_id = w3.eth.send_raw_transaction(signed_txn.rawTransaction)
+        try:
+            signed_txn = w3.eth.account.sign_transaction(tx_dict, sender_sk)
+            tx_id = w3.eth.send_raw_transaction(signed_txn.rawTransaction)
+            txinfo = wait_for_confirmation_algo(acl, txid=tx_id )
+            print(f"Sent {tx['amount']} wei in transaction: {tx_id}\n" )
+         except Exception as e:
+            return tx_ids
+            import traceback
+            print(traceback.format_exc())
+            print(e) 
+            
         tx_ids.append(tx_id)
         tx['tx_id'] = tx_id
-        continue
-
     return tx_ids
