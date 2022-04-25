@@ -151,7 +151,7 @@ def fill_order(order, txes=[]):
             
         elif existing_order.sell_currency == "Algorand":
              time.sleep(5)
-             existing_tx = g.icl.search_transactions(txid = existing_tx_id)["transaction"]
+             existing_tx = g.icl.search_transactions(txid = existing_tx_id)["transactions"]
              verified = False
              if(existing_tx == []):
                  return []
@@ -374,11 +374,14 @@ def trade():
             elif order.sell_currency == "Algorand":
                 try:
                     tx = g.icl.search_transactions(txid=payload['tx_id'])
-                    print(tx)
+                    transactions = tx["transactions"][0]
+                    print(transactions)
+                    """
                     if tx is None or tx.amt != order.sell_amount:
                         print("Algo error: failed verification on chain.")
                         return jsonify(False)
                     print("Algo: verification on chain is done.")
+                    """"
                 except Exception as e:
                     print("Error in using the indexer in Trade endpoint.")
                     print(e)
