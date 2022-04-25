@@ -202,7 +202,7 @@ def fill_order(order, txes=[]):
         
         g.session.commit()
         #Also create the txes for execution
-        child_tx = {'platform':child_order.sell_currency, 'receiver_pk':child_order.receiver_pk, 'order_id':child_order.creator_id, 'amount':child_order.sell_amount}
+        #child_tx = {'platform':child_order.sell_currency, 'receiver_pk':child_order.receiver_pk, 'order_id':child_order.creator_id, 'amount':child_order.sell_amount}
         #add it to the list of txes to be executed
         #txes.append(child_tx)
         #Then match for child order
