@@ -399,7 +399,7 @@ def trade():
         
         # If all goes well, return jsonify(True). else return jsonify(False)
         return jsonify(True)
-    esle:
+    else:
         return jsonify(False)
 
 @app.route('/order_book')
