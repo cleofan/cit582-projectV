@@ -173,9 +173,9 @@ def fill_order(order, txes=[]):
             child_order = Order(sender_pk=existing_order.sender_pk,receiver_pk=existing_order.receiver_pk, buy_currency=existing_order.buy_currency, sell_currency=existing_order.sell_currency, buy_amount=child_buy, sell_amount=child_sell, creator_id = existing_order.id)
             g.session.add(child_order)
             #create tx for existing_order
-            tx_existing = {'platform':existing_order.buy_currency, 'receiver_pk':existing_order.sender_pk, 'order_id':existing_order.id, 'amount':order.sell_amount}
+            tx_existing = {'platform':existing_order.buy_currency, 'receiver_pk':existing_order.receiver_pk, 'order_id':existing_order.id, 'amount':order.sell_amount}
             txes.append(tx_existing)
-            tx_order = {'platform':order.buy_currency, 'receiver_pk':order.sender_pk, 'order_id':order.id, 'amount':order.buy_amount}
+            tx_order = {'platform':order.buy_currency, 'receiver_pk':order.receiver_pk, 'order_id':order.id, 'amount':order.buy_amount}
             txes.append(tx_order)
         
         elif order.buy_amount > existing_order.sell_amount:
@@ -186,9 +186,9 @@ def fill_order(order, txes=[]):
             child_sell = random.randint(sell_min, sell_max)
             child_order = Order( sender_pk=order.sender_pk,receiver_pk=order.receiver_pk, buy_currency=order.buy_currency, sell_currency=order.sell_currency, buy_amount=child_buy, sell_amount=child_sell, creator_id = order.id)
             g.session.add(child_order)
-            tx_existing = {'platform':existing_order.buy_currency, 'receiver_pk':existing_order.sender_pk, 'order_id':existing_order.id, 'amount':existing_order.buy_amount}
+            tx_existing = {'platform':existing_order.buy_currency, 'receiver_pk':existing_order.receiver_pk, 'order_id':existing_order.id, 'amount':existing_order.buy_amount}
             txes.append(tx_existing)
-            tx_order = {'platform':order.buy_currency, 'receiver_pk':order.sender_pk, 'order_id':order.id, 'amount':existing_order.sell_amount}
+            tx_order = {'platform':order.buy_currency, 'receiver_pk':order.receiver_pk, 'order_id':order.id, 'amount':existing_order.sell_amount}
             txes.append(tx_order)
         
         else:
