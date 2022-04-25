@@ -372,26 +372,12 @@ def trade():
                 
             
             elif order.sell_currency == "Algorand":
-                #order_tx_id = base64.b64decode(order_tx_id).encode('ascii')
-                time.sleep(5)
                 try:
-                    response = g.icl.search_transactions(txid = order_tx_id)
-                    if response is None:
+                    tx = indexer.search_transaction(txid=payload['tx_id'])
+                    if tx is None or tx.amt != order.sell_amount:
+                        print("Algo error: failed verification on chain.")
                         return jsonify(False)
-                    transactions = response["transaction"]
-                    print("Algo Tranastion Info: " )
-                    
-                    print( transactions)
-                    if transactions is None:
-                        return jsonify(False)
-                    verified = False
-                    for tx in transactions:
-                        if (tx['payment-transaction']['amount'] == order.sell_amount and tx['payment-transaction']['receiver'] == algo_pk and tx['sender'] == order.sender_pk):
-                            verified = True
-                            print("Algo: the order passed verification on algo chain")
-                    if(verified == False):
-                        print("Trade endpoint: the order failed verification on algo chain.")
-                        return jsonify(False)
+                    print("Algo: verification on chain is done.")
                 except Exception as e:
                     print("Error in using the indexer in Trade endpoint.")
                     print(e)
