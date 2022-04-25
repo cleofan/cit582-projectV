@@ -374,6 +374,7 @@ def trade():
             elif order.sell_currency == "Algorand":
                 try:
                     tx = g.icl.search_transactions(txid=payload['tx_id'])
+                    print(tx)
                     if tx is None or tx.amt != order.sell_amount:
                         print("Algo error: failed verification on chain.")
                         return jsonify(False)
