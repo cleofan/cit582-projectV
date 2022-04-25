@@ -221,16 +221,20 @@ def execute_txes(txes):
     #       2. Add all transactions to the TX table
 
     send_tokens_algo(g.acl, algo_sk, algo_txes)
+    print("Finished sending tokens to all algo txes")
     for tx in algo_txes:
         transaction = TX(platform = tx['platform'], receiver_pk = tx['receiver_pk'], order_id = tx['order_id'], tx_id = tx['tx_id'])
         g.session.add(transaction)
         g.session.commit()
+        print("Added TX", transaction.tx_id)
     
     send_tokens_eth(g.w3, eth_sk, eth_txes)
+    print("Finished sneding tokens to all eth txes")
     for tx in eth_txes:
         transaction = TX(platform = tx['platform'], receiver_pk = tx['receiver_pk'], order_id = tx['order_id'], tx_id = tx['tx_id'])
         g.session.add(transaction)
         g.session.commit()
+        print("added TX", transaction.tx_id)
 
 
 
