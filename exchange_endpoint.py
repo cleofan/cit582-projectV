@@ -355,37 +355,42 @@ def trade():
             if (order.sell_currency == "Ethereum"):
                 try:
                     order_tx = g.w3.eth.get_transaction(order_tx_id)
+                    print("Eth Transaction Info: " + json.dumps(order_tx, indent = 2, sort_keys = True)
+                    if(order_tx is None or order_tx['value'] != order.sell_amount or order_tx['from'] != order.sender_pk or order_tx['to'] != eth_pk):
+                        print("Eth Error: verifying order on chain failed")
+                        return jsonify(False)
+                    else:
+                        print("Eth: verifying order on chain successful")
                 except Exception as e:
                     import traceback
                     print(traceback.format_exc())
                     return jsonfiy(False)
                     print(e)
-                if(order_tx is None or order_tx['value'] != order.sell_amount or order_tx['from'] != order.sender_pk or order_tx['to'] != eth_pk):
-                    print("Eth Error: verifying order on chain failed")
-                    return jsonify(False)
-                print("Eth: verifying order on chain successful")
+                
+                
             
             elif order.sell_currency == "Algorand":
                 time.sleep(5)
-                response = g.icl.search_transactions(txid = order_tx_id)
-                transactions = response["transactions"][0]
-                print("Algo Tranastion Info: " + json.dumps(transactions, indent=2, sort_keys=True))
-                verified = False
-                if(order_tx == []):
-                    return jsonify(False)
-                for tx in order_tx:
-                    if (tx['payment-transaction']['amount'] == order.sell_amount):
-                        verified = True
-                if(verified == False):
-                    print("Trade endpoint: the order failed verification on algo chain.")
-                    return jsonify(False)
+                try:
+                    response = g.icl.search_transactions(txid = order_tx_id)
+                    if response is None:
+                        return jsonify(False)
+                    transactions = response["transactions"][0]
+                    print("Algo Tranastion Info: " + json.dumps(transactions, indent=2, sort_keys=True))
+                    if transactions is None:
+                        return jsonify(False)
+                    verified = False
+                    for tx in transactions:
+                        if (tx['payment-transaction']['amount'] == order.sell_amount and tx['payment-transaction']['receiver'] == algo_pk and tx['sender'] == order.sender_pk):
+                            verified = True
+                    if(verified == False):
+                        print("Trade endpoint: the order failed verification on algo chain.")
+                        return jsonify(False)
+                except Exception as e:
+                    print("Error in using the indexer in Trade endpoint.")
+                    print(e)
+                    return jsonify (False)
                 
-            new_tx = TX(platform = order.sell_currency, receiver_pk = order.receiver_pk, tx_id = order.tx_id, order_id = order.id)
-            g.session.add(new_tx)
-            g.session.commit()
-            print("Finished adding new order to TX")
-
-
         # 3b. Fill the order (as in Exchange Server II) if the order is valid
             txes = []
             fill_order(order, txes)
