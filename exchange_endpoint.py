@@ -378,7 +378,7 @@ def trade():
                     response = g.icl.search_transactions(txid = order_tx_id)
                     if response is None:
                         return jsonify(False)
-                    transactions = response[0]
+                    transactions = response["transaction"]
                     print("Algo Tranastion Info: " )
                     
                     print( transactions)
