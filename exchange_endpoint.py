@@ -234,25 +234,26 @@ def execute_txes(txes):
 
 
 @app.route('/address', methods=['POST'])
+@app.route('/address', methods=['POST'])
 def address():
-    print("address")
     if request.method == "POST":
         content = request.get_json(silent=True)
         if 'platform' not in content.keys():
-            print(f"Error: no platform provided")
-            return jsonify("Error: no platform provided")
+            print( f"Error: no platform provided" )
+            return jsonify( "Error: no platform provided" )
         if not content['platform'] in ["Ethereum", "Algorand"]:
-            print(f"Error: {content['platform']} is an invalid platform")
-            return jsonify(f"Error: invalid platform provided: {content['platform']}")
-
+            print( f"Error: {content['platform']} is an invalid platform" )
+            return jsonify( f"Error: invalid platform provided: {content['platform']}"  )
+        
         if content['platform'] == "Ethereum":
-            # Your code here
-            #eth_sk, eth_pk = get_eth_keys()
-
-            return jsonify('0xa1D0635b58d408825B29E33a18b053Cb09daF27D')
+            eth_sk, eth_pk = get_eth_keys()
+            #Your code here
+            return jsonify(eth_pk)
         if content['platform'] == "Algorand":
+            #Your code here
             algo_sk, algo_pk = get_algo_keys()
-            return jsonify(algo_pk)
+            return jsonify( algo_pk )
+
 
 
 @app.route('/trade', methods=['POST'])
