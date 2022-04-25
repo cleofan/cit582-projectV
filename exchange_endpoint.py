@@ -381,7 +381,7 @@ def trade():
                         print("Algo error: failed verification on chain.")
                         return jsonify(False)
                     print("Algo: verification on chain is done.")
-                    """"
+                    """
                 except Exception as e:
                     print("Error in using the indexer in Trade endpoint.")
                     print(e)
