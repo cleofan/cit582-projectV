@@ -375,13 +375,14 @@ def trade():
                 try:
                     tx = g.icl.search_transactions(txid=payload['tx_id'])
                     transactions = tx["transactions"][0]
-                    print(transactions)
+                    #print(transactions)
                     """
                     if tx is None or tx.amt != order.sell_amount:
                         print("Algo error: failed verification on chain.")
                         return jsonify(False)
                     print("Algo: verification on chain is done.")
                     """
+                    print("The receiver matched? " + (transactions["payment-transaction"]["receiver"] == payload["receiver_pk"]))
                 except Exception as e:
                     print("Error in using the indexer in Trade endpoint.")
                     print(e)
