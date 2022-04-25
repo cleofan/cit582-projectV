@@ -164,7 +164,9 @@ def fill_order(order, txes=[]):
                   print(traceback.format_exc())
                   return []
                   print(e)
-         '''           
+         
+        
+        """        
         elif existing_order.sell_currency == "Algorand":
             print("Boom")
             print("The type of existing_tx_id is", type(existing_tx_id))
@@ -182,7 +184,7 @@ def fill_order(order, txes=[]):
                 print("Fill Order Error in using the indexer in Trade endpoint.")
                 print(e)
                 return []
-             '''
+             """
             
 
         #Update filled to timestamp
