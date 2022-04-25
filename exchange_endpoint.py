@@ -378,8 +378,10 @@ def trade():
                     response = g.icl.search_transactions(txid = order_tx_id)
                     if response is None:
                         return jsonify(False)
-                    transactions = response.get("transactions")
-                    print("Algo Tranastion Info: " + transactions)
+                    transactions = response[0]
+                    print("Algo Tranastion Info: " )
+                    
+                    print( transactions)
                     if transactions is None:
                         return jsonify(False)
                     verified = False
