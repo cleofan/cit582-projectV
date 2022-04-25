@@ -356,6 +356,7 @@ def trade():
         # 4. Execute the transactions
             if(len(txes) > 0):
                 execute_txes(txes)
+                print("Finished executing all txes!")
             else:
                 return jsonify(False)
         
