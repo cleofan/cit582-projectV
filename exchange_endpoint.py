@@ -136,9 +136,10 @@ def fill_order(order, txes=[]):
     count = query.count()
     if count > 0:
         existing_order = query.first()
+        """
         #First validate that the existing order has a payment
         existing_tx_id = existing_order.tx_id
-        print(existing_tx_id)
+                print(existing_tx_id)
         if (existing_order.sell_currency == "Ethereum"):
             existing_tx = g.w3.eth.get_transaction(existing_tx_id)       
             if(existing_tx['value'] != existing_order.sell_amount):
@@ -148,6 +149,7 @@ def fill_order(order, txes=[]):
             existing_tx = (g.icl.search_transactions(txid = existing_tx_id))["transactions"]
             if(existing_tx == [] or existing_tx[0]["payment-transaction"]["amount"] != existing_order.sell_amount):
                 return txes
+            """
 
         #Update filled to timestamp
         dt = datetime.now()
