@@ -186,7 +186,7 @@ def fill_order(order, txes=[]):
         #add it to the list of txes to be executed
         txes.append(child_tx)
         #Then match for child order
-        return(fill_order(child_order, txes))
+        return txes
     
     else:
         return txes
@@ -332,18 +332,22 @@ def trade():
             order_tx_id = order.tx_id
             if (order.sell_currency == "Ethereum"):
                 order_tx = g.w3.eth.get_transaction(order_tx_id)
-                if(order_tx['value'] != order.sell_amount or order_tx is None):
+                if(order_tx['value'] != order.sell_amount or order_tx is None or order_tx['from'] != order.sender_pk or order_tx['to'] != order.receiver_pk):
                     print("Eth: verifying order on chain failed")
                     return jsonify(False)
                 print("Eth: verifying order on chain successful")
             
             elif order.sell_currency == "Algorand":
                 order_tx = (g.icl.search_transactions(txid = order_tx_id))["transactions"]
-                
-                if(order_tx == [] or order_tx[0]["payment-transaction"]["amount"] != order.sell_amount):
-                    print("Algo:verifying order on chain failed")
+                verified = False
+                if(order_tx = []) return jsonify(False)
+                for tx in order_tx:
+                    if (tx['payment-transaction']['amount'] == order.sell_amount and tx['payment-transaction']['receiver'] == order.receiver_pk and tx['sender'] == order.sender_pk):
+                        verified = True
+                if(verified == False):
+                    print("Trade endpoint: the order failed verification on algo chain.")
                     return jsonify(False)
-                print("Algo: verifying order on chain successul")
+                
             new_tx = TX(platform = order.sell_currency, receiver_pk = order.receiver_pk, tx_id = order.tx_id, order_id = order.id)
             g.session.add(new_tx)
             g.session.commit()
