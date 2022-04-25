@@ -213,15 +213,7 @@ def fill_order(order, txes=[]):
         return txes
     
     else:
-        return txes
-
-
-
-
-
-
-
-    
+        return txes    
     pass
   
 def execute_txes(txes):
@@ -247,27 +239,25 @@ def execute_txes(txes):
     #          We've provided the send_tokens_algo and send_tokens_eth skeleton methods in send_tokens.py
     #       2. Add all transactions to the TX table
 
-    algo_result = send_tokens_algo(g.acl, algo_sk, algo_txes)
-    if algo_result == False:
+    algo_result_txids = send_tokens_algo(g.acl, algo_sk, algo_txes)
+    if len(algo_result_txids) != len(algo_txes):
         print("Trade:failed sending tokens to algo orders")
-    else:
-        for tx in algo_txes:
-            transaction = TX(platform = tx['platform'], receiver_pk = tx['receiver_pk'], order_id = tx['order_id'], tx_id = tx['tx_id'])
-            g.session.add(transaction)
-            g.session.commit()
-            print("Added TX", transaction.tx_id)
+    for tx in algo_txes:
+        transaction = TX(platform = tx['platform'], receiver_pk = tx['receiver_pk'], order_id = tx['order_id'], tx_id = tx['tx_id'])
+        g.session.add(transaction)
+        g.session.commit()
+        print("Added TX", transaction.tx_id)
     
-    eth_result = send_tokens_eth(g.w3, eth_sk, eth_txes)
-    if eth_result == False:
+    eth_result_txids = send_tokens_eth(g.w3, eth_sk, eth_txes)
+    if len(eth_result) != len(eth_txes):
         print("Trade:failed sending tokens to eth orders")
-    else:
-        for tx in eth_txes:
-            transaction = TX(platform = tx['platform'], receiver_pk = tx['receiver_pk'], order_id = tx['order_id'], tx_id = tx['tx_id'])
-            g.session.add(transaction)
-            g.session.commit()
-            print("added TX", transaction.tx_id)
+    for tx in eth_txes:
+        transaction = TX(platform = tx['platform'], receiver_pk = tx['receiver_pk'], order_id = tx['order_id'], tx_id = tx['tx_id'])
+        g.session.add(transaction)
+        g.session.commit()
+        print("added TX", transaction.tx_id)
         
-    if eth_result == False or algo_result == False:
+    if len(algo_result_txids) != len(algo_txes) or len(eth_result) != len(eth_txes):
         return False
     else:
         return True
