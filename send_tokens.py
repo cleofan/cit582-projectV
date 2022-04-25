@@ -155,7 +155,7 @@ def send_tokens_eth(w3,sender_sk,txes):
             tx_id = w3.eth.send_raw_transaction(signed_txn.rawTransaction)
             txinfo = wait_for_confirmation_algo(acl, txid=tx_id )
             print(f"Sent {tx['amount']} wei in transaction: {tx_id}\n" )
-         except Exception as e:
+        except Exception as e:
             return tx_ids
             import traceback
             print(traceback.format_exc())
