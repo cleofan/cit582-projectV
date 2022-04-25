@@ -113,13 +113,13 @@ def get_algo_keys():
 
 def get_eth_keys(filename = "eth_mnemonic.txt"):
     
-    
+    w3 = Web3()
     # TODO: Generate or read (using the mnemonic secret) 
     # the ethereum public/private keys
-    g.w3.eth.account.enable_unaudited_hdwallet_features()
+    w3.eth.account.enable_unaudited_hdwallet_features()
     eth_mnemonic = "deposit alpha exact virtual heart demand pilot matter morning jeans drip logic"
     try:
-        acct = g.w3.eth.account.from_mnemonic(eth_mnemonic)
+        acct = w3.eth.account.from_mnemonic(eth_mnemonic)
         eth_pk = acct._address
         eth_sk = acct._private_key
 
