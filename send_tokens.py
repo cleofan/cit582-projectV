@@ -56,6 +56,7 @@ def send_tokens_algo( acl, sender_sk, txes):
         # TODO: Sign the transaction
         signed_tx = unsigned_tx.sign(sender_sk)
         print("Yay! Signed the algo unsigned txn!")
+        tx_id = signed_tx.transaction.get_txid()
         
         try:
             print(f"Sending {tx['amount']} microalgo from {sender_pk} to {tx['receiver_pk']}" )
@@ -68,7 +69,7 @@ def send_tokens_algo( acl, sender_sk, txes):
         except Exception as e:
             print(e)
         
-        tx_id = signed_tx.transaction.get_txid()
+        
         print("The new algo tx_id is", tx_id)
         tx_ids.append(tx_id)
         tx['tx_id'] = tx_id
