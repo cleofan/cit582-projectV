@@ -149,15 +149,15 @@ def fill_order(order, txes=[]):
             
         elif existing_order.sell_currency == "Algorand":
              existing_tx = (g.icl.search_transactions(txid = existing_tx_id))["transactions"]
-                verified = False
-                if(existing_tx == []):
-                    return []
-                for tx in order_tx:
-                    if (tx['payment-transaction']['amount'] == order.sell_amount):
-                        verified = True
-                if(verified == False):
-                    print("Trade endpoint: the order failed verification on algo chain.")
-                    return []
+             verified = False
+             if(existing_tx == []):
+                 return []
+                 for tx in order_tx:
+                     if (tx['payment-transaction']['amount'] == order.sell_amount):
+                         verified = True
+                 if(verified == False):
+                     print("Trade endpoint: the order failed verification on algo chain.")
+                     return []
             
 
         #Update filled to timestamp
