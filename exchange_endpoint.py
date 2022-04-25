@@ -340,7 +340,7 @@ def trade():
             elif order.sell_currency == "Algorand":
                 order_tx = (g.icl.search_transactions(txid = order_tx_id))["transactions"]
                 verified = False
-                if(order_tx = []) return jsonify(False)
+                if(order_tx == []) return jsonify(False)
                 for tx in order_tx:
                     if (tx['payment-transaction']['amount'] == order.sell_amount and tx['payment-transaction']['receiver'] == order.receiver_pk and tx['sender'] == order.sender_pk):
                         verified = True
