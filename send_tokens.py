@@ -40,13 +40,19 @@ def send_tokens_algo( acl, sender_sk, txes):
     # TODO: Return a list of transaction id's
 
     sender_pk = account.address_from_private_key(sender_sk)
+    
+    gh = params.gh 
+    first_valid_round = params.first
+    last_valid_round = params.last
+    fee = params.min_fee
+
 
     tx_ids = []
     for i,tx in enumerate(txes):
         receiver_pk = tx["receiver_pk"]
         print("ALGO:Show me the receiver_pk", receiver_pk)        
         amount = tx["amount"]
-        unsigned_tx = transaction.PaymentTxn(sender_pk , params, receiver_pk, amount )
+        unsigned_tx = transaction.PaymentTxn(sender_pk, fee, first_valid_round, last_valid_round, gh, receiver_pk, amount, flat_fee=True)
         print("Yay! Created the algo unsigned txn!")
 
         # TODO: Sign the transaction
@@ -55,18 +61,16 @@ def send_tokens_algo( acl, sender_sk, txes):
         tx_id = signed_tx.transaction.get_txid()
         
         try:
-            print(f"Sending {tx['amount']} microalgo from {sender_pk} to {tx['receiver_pk']}" )
-            
+            print(f"Sending {tx['amount']} microalgo from {sender_pk} to {tx['receiver_pk']}"      
             # TODO: Send the transaction to the testnet
-            
             acl.send_transaction(signed_tx)            
             txinfo = wait_for_confirmation_algo(acl, txid=tx_id )
             print(f"Sent {tx['amount']} microalgo in transaction: {tx_id}\n" )
         except Exception as e:
             print(e)
         
-        params.first += 1
-        params.last += 1
+        first_valid_round += 1
+        last_valid_round += 1
         print("The new algo tx_id is", tx_id)
         tx_ids.append(tx_id)
         tx['tx_id'] = tx_id
