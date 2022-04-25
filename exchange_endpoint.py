@@ -142,25 +142,46 @@ def fill_order(order, txes=[]):
     if count > 0:
         existing_order = query.first()
         
+        eth_pk = get_eth_keys()[1]
+        algo_pk = get_algo_keys()[1]
+        
         #First validate that the existing order has a payment
         existing_tx_id = existing_order.tx_id
         if (existing_order.sell_currency == "Ethereum"):
-            existing_tx = g.w3.eth.get_transaction(existing_tx_id)       
-            if(existing_tx['value'] != existing_order.sell_amount):
-                return []
-            
-        elif existing_order.sell_currency == "Algorand":
-             time.sleep(5)
-             existing_tx = g.icl.search_transactions(txid = existing_tx_id)["transactions"]
-             verified = False
-             if(existing_tx == []):
-                 return []
-                 for tx in order_tx:
-                     if (tx['payment-transaction']['amount'] == order.sell_amount):
-                         verified = True
-                 if(verified == False):
-                     print("Trade endpoint: the order failed verification on algo chain.")
-                     return []
+            try:
+                order_tx = g.w3.eth.get_transaction(existing_tx_id)
+                print("Eth Transaction Info: " )
+                print(order_tx)
+                if(order_tx is None) or( order_tx['value'] != existing_order.sell_amount) or (order_tx['from'] != existing_order.sender_pk) or (order_tx['to'] != eth_pk) :
+                    print("Fill Order Eth Error: verifying order on chain failed")
+                    return []
+                else:
+                    print("Fill Order Eth: verifying order on chain successful")
+             except Exception as e:
+                  import traceback
+                  print(traceback.format_exc())
+                  return []
+                  print(e)
+          elif order.sell_currency == "Algorand":
+               try:
+                   tx = g.icl.search_transactions(existing_tx_id)
+                   transactions = tx["transactions"][0]
+                    #print(transactions)
+                    """
+                    if tx is None or tx.amt != order.sell_amount:
+                        print("Algo error: failed verification on chain.")
+                        return jsonify(False)
+                    print("Algo: verification on chain is done.")
+                    """
+                   #print("The receiver matched? ", (transactions["payment-transaction"]["receiver"] == algo_pk))
+                    if(transactions is None or transactions["payment-transaction"]["receiver"] != algo_pk or transactions["payment-transaction"]["amount"]!= existing_order.sell_amount or transactions["sender"]!=existing_order.sender_pk):
+                        print("Fill Order Algo Fail: Failed to verify the order on chain.")
+                        return []
+                    print("Fill Order Algo: verifying on chain successful.")
+                except Exception as e:
+                    print("Fill Order Error in using the indexer in Trade endpoint.")
+                    print(e)
+                    return []
             
 
         #Update filled to timestamp
