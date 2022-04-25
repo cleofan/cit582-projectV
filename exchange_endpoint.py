@@ -135,26 +135,30 @@ def fill_order(order, txes=[]):
     # Validate the order has a payment to back it (make sure the counterparty also made a payment)
     # Make sure that you end up executing all resulting transactions!
     
-
-    
     query = g.session.query(Order).filter(Order.filled == None, Order.buy_currency == order.sell_currency, Order.sell_currency == order.buy_currency, Order.sell_amount / Order.buy_amount >= order.buy_amount/order.sell_amount)   
     count = query.count()
     if count > 0:
         existing_order = query.first()
-        """
+        
         #First validate that the existing order has a payment
         existing_tx_id = existing_order.tx_id
-                print(existing_tx_id)
         if (existing_order.sell_currency == "Ethereum"):
             existing_tx = g.w3.eth.get_transaction(existing_tx_id)       
             if(existing_tx['value'] != existing_order.sell_amount):
-                return txes
+                return []
             
         elif existing_order.sell_currency == "Algorand":
-            existing_tx = (g.icl.search_transactions(txid = existing_tx_id))["transactions"]
-            if(existing_tx == [] or existing_tx[0]["payment-transaction"]["amount"] != existing_order.sell_amount):
-                return txes
-            """
+             existing_tx = (g.icl.search_transactions(txid = existing_tx_id))["transactions"]
+                verified = False
+                if(existing_tx == []):
+                    return []
+                for tx in order_tx:
+                    if (tx['payment-transaction']['amount'] == order.sell_amount):
+                        verified = True
+                if(verified == False):
+                    print("Trade endpoint: the order failed verification on algo chain.")
+                    return []
+            
 
         #Update filled to timestamp
         dt = datetime.now()
