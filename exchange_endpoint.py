@@ -166,7 +166,7 @@ def fill_order(order, txes=[]):
                   print(e)
         elif existing_order.sell_currency == "Algorand":
             print("Boom")
-            print("The type of existing_tx_id is", type(existing_tx_id"))
+            print("The type of existing_tx_id is", type(existing_tx_id))
             try:
                 tx = g.icl.search_transactions(existing_tx_id)
                 transactions = tx["transactions"][0]
