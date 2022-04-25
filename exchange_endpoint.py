@@ -368,7 +368,7 @@ def trade():
             elif order.sell_currency == "Algorand":
                 time.sleep(5)
                 response = g.icl.search_transactions(txid = order_tx_id)
-                transactions = response["transactions"]
+                transactions = response["transactions"][0]
                 print("Algo Tranastion Info: " + json.dumps(transactions, indent=2, sort_keys=True))
                 verified = False
                 if(order_tx == []):
