@@ -4,30 +4,27 @@ from algosdk.v2client import algod
 from algosdk.v2client import indexer
 from algosdk import account
 from algosdk.future import transaction
-import time
 
 def connect_to_algo(connection_type=''):
     #Connect to Algorand node maintained by PureStake
     algod_token = "B3SU4KcVKi94Jap2VXkK83xx38bsv95K5UZm2lab"
-    
+
     if connection_type == "indexer":
         # TODO: return an instance of the v2client indexer. This is used for checking payments for tx_id's
         algod_address = "https://testnet-algorand.api.purestake.io/idx2"
-        headers = {"X-API-Key": algod_token}
-        return indexer.IndexerClient(algod_token, algod_address, headers)
-        
+        return indexer.IndexerClient(algod_token, algod_address)
     else:
         # TODO: return an instance of the client for sending transactions
         # Tutorial Link: https://developer.algorand.org/tutorials/creating-python-transaction-purestake-api/
         algod_address = "https://testnet-algorand.api.purestake.io/ps2"
-        purestake_token = {'X-API-Key': algod_token}
-        algodclient = algod.AlgodClient(algod_token, algod_address, headers=purestake_token)
-        return algodclient
+        purestake_token = {'X-Api-key': algod_token}
 
-    return None
+        algodclient = algod.AlgodClient(algod_token, algod_address, headers=purestake_token)
+
+    return algodclient
 
 def send_tokens_algo( acl, sender_sk, txes):
-    params = acl.suggested_params()
+    params = acl.suggested_params
 
     # TODO: You might want to adjust the first/last valid rounds in the suggested_params
     #       See guide for details
@@ -35,13 +32,14 @@ def send_tokens_algo( acl, sender_sk, txes):
     first_valid_round = params.first
     tx_fee = params.min_fee
     last_valid_round = params.last
- 
     # TODO: For each transaction, do the following:
-    #       - Create the Payment transaction 
+    #       - Create the Payment transaction
     #       - Sign the transaction
 
-    sender_pk = account.address_from_private_key(sender_sk)
     # TODO: Return a list of transaction id's
+    #sk=sender_sk
+
+    sender_pk = account.address_from_private_key(sender_sk)
 
     tx_ids = []
     for i, tx in enumerate(txes):
@@ -71,7 +69,6 @@ def send_tokens_algo( acl, sender_sk, txes):
 
     return tx_ids
 
-
 # Function from Algorand Inc.
 def wait_for_confirmation_algo(client, txid):
     """
@@ -81,7 +78,6 @@ def wait_for_confirmation_algo(client, txid):
     last_round = client.status().get('last-round')
     txinfo = client.pending_transaction_info(txid)
     while not (txinfo.get('confirmed-round') and txinfo.get('confirmed-round') > 0):
-        time.sleep(5)
         print("Waiting for confirmation")
         last_round += 1
         client.status_after_block(last_round)
@@ -123,7 +119,7 @@ def wait_for_confirmation_eth(w3, tx_hash):
                 receipt = w3.eth.get_transaction_receipt(tx_hash)
             except TransactionNotFound:
                 continue
-            break 
+            break
     return receipt
 
 
