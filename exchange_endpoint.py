@@ -118,11 +118,16 @@ def get_eth_keys(filename = "eth_mnemonic.txt"):
     # the ethereum public/private keys
     g.w3.eth.account.enable_unaudited_hdwallet_features()
     eth_mnemonic = "deposit alpha exact virtual heart demand pilot matter morning jeans drip logic"
-    acct = g.w3.eth.account.from_mnemonic(eth_mnemonic)
-    eth_pk = acct._address
-    eth_sk = acct._private_key
+    try:
+        acct = g.w3.eth.account.from_mnemonic(eth_mnemonic)
+        eth_pk = acct._address
+        eth_sk = acct._private_key
 
-    return eth_sk, eth_pk
+        return eth_sk, eth_pk
+    except Exception as e:
+        print("Failed in acquiring eth keys")
+        print(traceback.format_exc())
+        
   
 def fill_order(order, txes=[]):
     # TODO: 
