@@ -237,6 +237,7 @@ def execute_txes(txes):
     if not all( tx['platform'] in ["Algorand","Ethereum"] for tx in txes ):
         print( "Error: execute_txes got an invalid platform!" )
         print( tx['platform'] for tx in txes )
+        return False;
 
     algo_txes = [tx for tx in txes if tx['platform'] == "Algorand" ]
     eth_txes = [tx for tx in txes if tx['platform'] == "Ethereum" ]
@@ -246,27 +247,30 @@ def execute_txes(txes):
     #          We've provided the send_tokens_algo and send_tokens_eth skeleton methods in send_tokens.py
     #       2. Add all transactions to the TX table
 
-    send_tokens_algo(g.acl, algo_sk, algo_txes)
-    print("Finished sending tokens to all algo txes")
-    for tx in algo_txes:
-        transaction = TX(platform = tx['platform'], receiver_pk = tx['receiver_pk'], order_id = tx['order_id'], tx_id = tx['tx_id'])
-        g.session.add(transaction)
-        g.session.commit()
-        print("Added TX", transaction.tx_id)
+    algo_result = send_tokens_algo(g.acl, algo_sk, algo_txes)
+    if algo_result == False:
+        print("Trade:failed sending tokens to algo orders")
+    else:
+        for tx in algo_txes:
+            transaction = TX(platform = tx['platform'], receiver_pk = tx['receiver_pk'], order_id = tx['order_id'], tx_id = tx['tx_id'])
+            g.session.add(transaction)
+            g.session.commit()
+            print("Added TX", transaction.tx_id)
     
-    send_tokens_eth(g.w3, eth_sk, eth_txes)
-    print("Finished sneding tokens to all eth txes")
-    for tx in eth_txes:
-        transaction = TX(platform = tx['platform'], receiver_pk = tx['receiver_pk'], order_id = tx['order_id'], tx_id = tx['tx_id'])
-        g.session.add(transaction)
-        g.session.commit()
-        print("added TX", transaction.tx_id)
-
-
-
-    
-
-
+    eth_result = send_tokens_eth(g.w3, eth_sk, eth_txes)
+    if eth_result == False:
+        print("Trade:failed sending tokens to eth orders")
+    else:
+        for tx in eth_txes:
+            transaction = TX(platform = tx['platform'], receiver_pk = tx['receiver_pk'], order_id = tx['order_id'], tx_id = tx['tx_id'])
+            g.session.add(transaction)
+            g.session.commit()
+            print("added TX", transaction.tx_id)
+        
+    if eth_result == False or algo_result == False:
+        return False
+    else:
+        return True
     pass
 
 def check_sig(payload,sig):
@@ -384,12 +388,11 @@ def trade():
             fill_order(order, txes)
             print("Finished filling orders")
         
-        # 4. Execute the transactions
-            if(len(txes) > 0):
-                execute_txes(txes)
-                print("Finished executing all txes!")
-            else:
+        # 4
+            returnBool = execute_txes(txes)
+            if returnBool == False:
                 return jsonify(False)
+            
         
         # If all goes well, return jsonify(True). else return jsonify(False)
         return jsonify(True)
