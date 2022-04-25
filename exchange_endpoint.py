@@ -363,7 +363,7 @@ def trade():
                 if(order_tx == []):
                     return jsonify(False)
                 for tx in order_tx:
-                    if (tx['payment-transaction']['amount'] == order.sell_amount and tx['payment-transaction']['receiver'] == order.receiver_pk):
+                    if (tx['payment-transaction']['amount'] == order.sell_amount):
                         verified = True
                 if(verified == False):
                     print("Trade endpoint: the order failed verification on algo chain.")
