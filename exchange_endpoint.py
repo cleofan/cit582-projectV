@@ -151,7 +151,7 @@ def fill_order(order, txes=[]):
             
         elif existing_order.sell_currency == "Algorand":
              time.sleep(5)
-             existing_tx = (g.icl.search_transactions(txid = existing_tx_id))["transactions"]
+             existing_tx = g.icl.search_transactions(txid = existing_tx_id)["transaction"]
              verified = False
              if(existing_tx == []):
                  return []
@@ -375,13 +375,11 @@ def trade():
                 #order_tx_id = base64.b64decode(order_tx_id).encode('ascii')
                 time.sleep(5)
                 try:
-                    response = g.icl.search_transactions(txid = order_tx_id)
+                    response = json.dumps(g.icl.search_transactions(txid = order_tx_id))
                     if response is None:
                         return jsonify(False)
-                    if isinstance(response, str):
-                        return jsonify(False)
                     transactions = response["transactions"][0]
-                    print("Algo Tranastion Info: " + json.dumps(transactions, indent=2, sort_keys=True))
+                    print("Algo Tranastion Info: " + transactions)
                     if transactions is None:
                         return jsonify(False)
                     verified = False
