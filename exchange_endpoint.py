@@ -148,6 +148,7 @@ def fill_order(order, txes=[]):
                 return []
             
         elif existing_order.sell_currency == "Algorand":
+             time.sleep(5)
              existing_tx = (g.icl.search_transactions(txid = existing_tx_id))["transactions"]
              verified = False
              if(existing_tx == []):
@@ -356,6 +357,7 @@ def trade():
                 print("Eth: verifying order on chain successful")
             
             elif order.sell_currency == "Algorand":
+                time.sleep(5)
                 order_tx = (g.icl.search_transactions(txid = order_tx_id))["transactions"]
                 verified = False
                 if(order_tx == []):
