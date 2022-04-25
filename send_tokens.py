@@ -45,7 +45,7 @@ def send_tokens_algo( acl, sender_sk, txes):
     for i,tx in enumerate(txes):
         receiver_pk = tx["receiver_pk"]
         print("ALGO:Show me the receiver_pk", receiver_pk)        
-        amount = tx["amount"] * 1000000
+        amount = tx["amount"]
         unsigned_tx = transaction.PaymentTxn(sender_pk , params, receiver_pk, amount )
         print("Yay! Created the algo unsigned txn!")
 
