@@ -320,27 +320,34 @@ def trade():
             order = Order(receiver_pk = payload['receiver_pk'], sender_pk = payload['sender_pk'], tx_id = payload['tx_id'], buy_currency = payload['buy_currency'], sell_currency = payload['sell_currency'], buy_amount = payload['buy_amount'], sell_amount = payload['sell_amount'], signature= payload['signature'])
             g.session.add(order)
             g.session.commit()
+            print("Finished checking signature and adding the order")
         
         # 3a. Check if the order is backed by a transaction equal to the sell_amount (this is new)
             order_tx_id = order.tx_id
             if (order.sell_currency == "Ethereum"):
                 order_tx = g.w3.eth.get_transaction(order_tx_id)
                 if(order_tx['value'] != order.sell_amount or order_tx is None):
+                    print("Eth: verifying order on chain failed")
                     return jsonify(False)
+                print("Eth: verifying order on chain successful")
             
             elif order.sell_currency == "Algorand":
                 order_tx = (g.icl.search_transactions(txid = order_tx_id))["transactions"]
                 
                 if(order_tx == [] or order_tx[0]["payment-transaction"]["amount"] != order.sell_amount):
+                    print("Algo:verifying order on chain failed")
                     return jsonify(False)
+                print("Algo: verifying order on chain successul")
             new_tx = TX(platform = order.sell_currency, receiver_pk = order.receiver_pk, tx_id = order.tx_id, order_id = order.id)
             g.session.add(new_tx)
             g.session.commit()
+            print("Finished adding new order to TX")
 
 
         # 3b. Fill the order (as in Exchange Server II) if the order is valid
             txes = []
             fill_order(order, txes)
+            print("Finished filling orders")
         
         # 4. Execute the transactions
             if(len(txes) > 0):
