@@ -149,6 +149,7 @@ def fill_order(order, txes=[]):
         existing_tx_id = existing_order.tx_id
         print("existing tx id",existing_tx_id)
         if (existing_order.sell_currency == "Ethereum"):
+            print("Kiki")
             try:
                 order_tx = g.w3.eth.get_transaction(existing_tx_id)
                 print("Eth Transaction Info: " )
@@ -163,7 +164,8 @@ def fill_order(order, txes=[]):
                   print(traceback.format_exc())
                   return []
                   print(e)
-        elif order.sell_currency == "Algorand":
+        elif existing_order.sell_currency == "Algorand":
+            print("Boom")
             try:
                 tx = g.icl.search_transactions(existing_tx_id)
                 transactions = tx["transactions"][0]
@@ -373,8 +375,8 @@ def trade():
             if (order.sell_currency == "Ethereum"):
                 try:
                     order_tx = g.w3.eth.get_transaction(order_tx_id)
-                    print("Eth Transaction Info: " )
-                    print(order_tx)
+                    #print("Eth Transaction Info: " )
+                    #print(order_tx)
                     if(order_tx is None) or( order_tx['value'] != order.sell_amount) or (order_tx['from'] != order.sender_pk) or (order_tx['to'] != eth_pk) :
                         print("Eth Error: verifying order on chain failed")
                         return jsonify(False)
