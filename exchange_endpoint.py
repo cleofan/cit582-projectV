@@ -192,9 +192,9 @@ def fill_order(order, txes=[]):
             txes.append(tx_order)
         
         else:
-            tx_existing = {'platform':existing_order.buy_currency, 'receiver_pk':existing_order.sender_pk, 'order_id':existing_order.id, 'amount':existing_order.buy_amount}
+            tx_existing = {'platform':existing_order.buy_currency, 'receiver_pk':existing_order.receiver_pk, 'order_id':existing_order.id, 'amount':existing_order.buy_amount}
             txes.append(tx_existing)
-            tx_order = {'platform':order.buy_currency, 'receiver_pk':order.sender_pk, 'order_id':order.id, 'amount':order.buy_amount}
+            tx_order = {'platform':order.buy_currency, 'receiver_pk':order.receiver_pk, 'order_id':order.id, 'amount':order.buy_amount}
             txes.append(tx_order)
             
             
