@@ -382,7 +382,11 @@ def trade():
                         return jsonify(False)
                     print("Algo: verification on chain is done.")
                     """
-                    print("The receiver matched? ", (transactions["payment-transaction"]["receiver"] == algo_pk))
+                    #print("The receiver matched? ", (transactions["payment-transaction"]["receiver"] == algo_pk))
+                    if(transactions is None or transactions["payment-transaction"]["receiver"] != algo_pk or transactions["payment-transaction"]["amount"]!= order.sell_amount or transactions["sender"]!=order.sender_pk):
+                        print("Algo Fail: Failed to verify the order on chain.")
+                        return jsonify(False)
+                    print("Algo: verifying on chain successful.")
                 except Exception as e:
                     print("Error in using the indexer in Trade endpoint.")
                     print(e)
