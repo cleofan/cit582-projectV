@@ -52,7 +52,7 @@ def send_tokens_algo( acl, sender_sk, txes):
         receiver_pk = tx["receiver_pk"]
         print("ALGO:Show me the receiver_pk", receiver_pk)        
         amount = tx["amount"]
-        unsigned_tx = transaction.PaymentTxn(sender_pk, fee, first_valid_round, last_valid_round, gh, receiver_pk, amount, flat_fee=True)
+        unsigned_tx = transaction.PaymentTxn(sender_pk, fee, first_valid_round, last_valid_round, gh, receiver_pk, amount)
         print("Yay! Created the algo unsigned txn!")
 
         # TODO: Sign the transaction
