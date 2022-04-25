@@ -372,7 +372,7 @@ def trade():
                 
             
             elif order.sell_currency == "Algorand":
-                order_tx_id = base64.b64decode(order_tx_id).encode('ascii')
+                #order_tx_id = base64.b64decode(order_tx_id).encode('ascii')
                 time.sleep(5)
                 try:
                     response = g.icl.search_transactions(txid = order_tx_id)
