@@ -44,7 +44,7 @@ def send_tokens_algo( acl, sender_sk, txes):
     tx_ids = []
     for i,tx in enumerate(txes):
         receiver_pk = tx["receiver_pk"]
-        print("Show me the receiver_pk", receiver_pk)
+        print("ALGO:Show me the receiver_pk", receiver_pk)
         
         amount = tx["amount"]
         
@@ -134,7 +134,6 @@ def wait_for_confirmation_eth(w3, tx_hash):
 def send_tokens_eth(w3,sender_sk,txes):
     sender_account = w3.eth.account.privateKeyToAccount(sender_sk)
     sender_pk = sender_account._address
-    print("The sender eth pk is", sender_pk)
 
     # TODO: For each of the txes, sign and send them to the testnet
     # Make sure you track the nonce -locally-
@@ -142,8 +141,10 @@ def send_tokens_eth(w3,sender_sk,txes):
     tx_ids = []
     for i,tx in enumerate(txes):
         # Your code here
+        
         tx_amount = tx['amount']
         receiver_pk = tx['receiver_pk']
+        print("ETH:Show me the receiver:", receiver_pk)
         tx_dict = {
                 'nonce': starting_nonce+i, #Locally update nonce
                 'gasPrice':w3.eth.gas_price,
