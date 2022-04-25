@@ -170,8 +170,13 @@ def fill_order(order, txes=[]):
             sell_min = math.ceil (existing_order.sell_amount / existing_order.buy_amount * child_buy)
             sell_max = existing_order.sell_amount - order.buy_amount
             child_sell = random.randint(sell_min, sell_max)
-            child_order = Order( sender_pk=existing_order.sender_pk,receiver_pk=existing_order.receiver_pk, buy_currency=existing_order.buy_currency, sell_currency=existing_order.sell_currency, buy_amount=child_buy, sell_amount=child_sell, creator_id = existing_order.id)
+            child_order = Order(sender_pk=existing_order.sender_pk,receiver_pk=existing_order.receiver_pk, buy_currency=existing_order.buy_currency, sell_currency=existing_order.sell_currency, buy_amount=child_buy, sell_amount=child_sell, creator_id = existing_order.id)
             g.session.add(child_order)
+            #create tx for existing_order
+            tx_existing = {'platform':existing_order.buy_currency, 'receiver_pk':existing_oder.sender_pk, 'order_id':existing_order.id, 'amount':order.sell_amount}
+            txes.add(tx_existing)
+            tx_order = {'platform':order.buy_currency, 'receiver_pk':oder.sender_pk, 'order_id':order.id, 'amount':order.buy_amount}
+            txes.add(tx_order)
         
         elif order.buy_amount > existing_order.sell_amount:
             #Calculate the max unfilled amount
@@ -181,15 +186,25 @@ def fill_order(order, txes=[]):
             child_sell = random.randint(sell_min, sell_max)
             child_order = Order( sender_pk=order.sender_pk,receiver_pk=order.receiver_pk, buy_currency=order.buy_currency, sell_currency=order.sell_currency, buy_amount=child_buy, sell_amount=child_sell, creator_id = order.id)
             g.session.add(child_order)
+            tx_existing = {'platform':existing_order.buy_currency, 'receiver_pk':existing_oder.sender_pk, 'order_id':existing_order.id, 'amount':existing_order.buy_amount}
+            txes.add(tx_existing)
+            tx_order = {'platform':order.buy_currency, 'receiver_pk':oder.sender_pk, 'order_id':order.id, 'amount':existing_order.sell_amount}
+            txes.add(tx_order)
         
         else:
-            return txes
+            tx_existing = {'platform':existing_order.buy_currency, 'receiver_pk':existing_oder.sender_pk, 'order_id':existing_order.id, 'amount':existing_order.buy_amount}
+            txes.add(tx_existing)
+            tx_order = {'platform':order.buy_currency, 'receiver_pk':oder.sender_pk, 'order_id':order.id, 'amount':order.buy_amount}
+            txes.add(tx_order)
+            
+            
+            
         
         g.session.commit()
-        #Also create the child tx for execution
+        #Also create the txes for execution
         child_tx = {'platform':child_order.sell_currency, 'receiver_pk':child_order.receiver_pk, 'order_id':child_order.creator_id, 'amount':child_order.sell_amount}
         #add it to the list of txes to be executed
-        txes.append(child_tx)
+        #txes.append(child_tx)
         #Then match for child order
         return txes
     
