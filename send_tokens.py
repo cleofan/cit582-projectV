@@ -40,7 +40,7 @@ def send_tokens_algo( acl, sender_sk, txes):
     #       - Create the Payment transaction 
     #       - Sign the transaction
 
-    
+    sender_pk = account.address_from_private_key(sender_sk)
     # TODO: Return a list of transaction id's
 
     tx_ids = []
