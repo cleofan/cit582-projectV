@@ -14,6 +14,7 @@ import sys
 import traceback
 import random
 import time
+import base64
 from algosdk.v2client import indexer
 from web3 import Web3
 
@@ -371,6 +372,7 @@ def trade():
                 
             
             elif order.sell_currency == "Algorand":
+                order_tx_id = base64.b64decode(order_tx_id).encode('ascii')
                 time.sleep(5)
                 try:
                     response = g.icl.search_transactions(txid = order_tx_id)
