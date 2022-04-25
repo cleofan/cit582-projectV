@@ -355,7 +355,7 @@ def trade():
             if (order.sell_currency == "Ethereum"):
                 try:
                     order_tx = g.w3.eth.get_transaction(order_tx_id)
-                    print("Eth Transaction Info: " + json.dumps(order_tx, indent = 2, sort_keys = True))
+                    print("Eth Transaction Info: " + order_tx)
                     if(order_tx is None) or( order_tx['value'] != order.sell_amount) or (order_tx['from'] != order.sender_pk) or (order_tx['to'] != eth_pk) :
                         print("Eth Error: verifying order on chain failed")
                         return jsonify(False)
