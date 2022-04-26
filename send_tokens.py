@@ -50,9 +50,9 @@ def send_tokens_algo( acl, sender_sk, txes):
         
         unsigned_tx = transaction.PaymentTxn(sender_pk , params, receiver_pk, amount )
         print("Yay! Created the algo unsigned txn!")
+
         params.first += 1
         params.last += 1
-
         # TODO: Sign the transaction
         signed_tx = unsigned_tx.sign(sender_sk)
         print("Yay! Signed the algo unsigned txn!")
